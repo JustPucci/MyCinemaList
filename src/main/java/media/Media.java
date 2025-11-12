@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Film.class, name = "Film"),
         @JsonSubTypes.Type(value = Documentario.class, name = "Documentario"),
-        // SerieTV will be added here when implemented
+        @JsonSubTypes.Type(value = Documentario.class, name = "SerieTv"),
 })
 
 public interface Media {
@@ -21,7 +21,7 @@ public interface Media {
         VISTO, DA_VEDERE, IN_VISIONE
     }
     public enum Genere {
-        AZIONE, COMMEDIA, DRAMMATICO, HORROR, FANTASCIENZA, THRILLER, ALTRO
+        AZIONE, COMMEDIA, DRAMMATICO, HORROR, FANTASCIENZA, THRILLER
     }
 
     // Common access methods
