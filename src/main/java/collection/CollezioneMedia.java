@@ -2,6 +2,8 @@ package collection;
 
 import dati.GestoreDatiInterface; // ADAPTER
 import media.Media;
+import strategy.CriterioFiltro;
+import strategy.CriterioOrdinamento;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -113,4 +115,14 @@ public class CollezioneMedia {
     public List<Media> getElencoCompleto() {
         return new ArrayList<>(this.elencoMedia); // Return a copy
     }
+
+    //Metodi dello STRATEGY
+    
+    public List<Media> applicaFiltro (CriterioFiltro criterio){
+        return criterio.applicaFiltro(this.elencoMedia);
+    }
+    public List<Media> ordina(CriterioOrdinamento criterio){
+        return criterio.ordina(this.elencoMedia);
+    }
+
 }
