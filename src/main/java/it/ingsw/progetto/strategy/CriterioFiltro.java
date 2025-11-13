@@ -1,6 +1,6 @@
-package strategy;
+package it.ingsw.progetto.strategy;
 
-import media.Media; // Import the base Media interface
+import it.ingsw.progetto.media.Media; // Import the base Media interface
 import java.util.List;
 
 

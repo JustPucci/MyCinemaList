@@ -1,6 +1,6 @@
-package dati;
+package it.ingsw.progetto.dati;
 
-import media.Media;
+import it.ingsw.progetto.media.Media;
 
 import java.io.IOException;
 import java.util.List;

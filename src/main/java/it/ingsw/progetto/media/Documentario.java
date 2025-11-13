@@ -1,4 +1,4 @@
-package media;
+package it.ingsw.progetto.media;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;

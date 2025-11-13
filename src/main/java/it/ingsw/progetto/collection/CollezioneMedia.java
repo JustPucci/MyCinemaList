@@ -1,14 +1,13 @@
-package collection;
+package it.ingsw.progetto.collection;
 
-import dati.GestoreDatiInterface; // ADAPTER
-import media.Media;
-import strategy.CriterioFiltro;
-import strategy.CriterioOrdinamento;
+import it.ingsw.progetto.dati.GestoreDatiInterface; // ADAPTER
+import it.ingsw.progetto.media.Media;
+import it.ingsw.progetto.strategy.CriterioFiltro;
+import it.ingsw.progetto.strategy.CriterioOrdinamento;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * GESTISCE la collezione di media
@@ -117,7 +116,7 @@ public class CollezioneMedia {
     }
 
     //Metodi dello STRATEGY
-    
+
     public List<Media> applicaFiltro (CriterioFiltro criterio){
         return criterio.applicaFiltro(this.elencoMedia);
     }

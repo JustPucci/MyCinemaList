@@ -1,7 +1,5 @@
-package media;
+package it.ingsw.progetto.media;
 
-import media.Media;
-import media.Media.StatoVisione;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

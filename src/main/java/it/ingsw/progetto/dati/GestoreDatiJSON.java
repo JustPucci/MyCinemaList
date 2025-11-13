@@ -1,9 +1,9 @@
-package dati;
+package it.ingsw.progetto.dati;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import media.Media;
+import it.ingsw.progetto.media.Media;
 
 import java.io.File;
 import java.io.IOException;

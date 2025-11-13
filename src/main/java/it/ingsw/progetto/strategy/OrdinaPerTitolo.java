@@ -1,6 +1,6 @@
-package strategy;
+package it.ingsw.progetto.strategy;
 
-import media.Media;
+import it.ingsw.progetto.media.Media;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
