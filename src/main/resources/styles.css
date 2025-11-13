@@ -1,0 +1,59 @@
+/* Stile Globale (Tema Scuro) */
+.root {
+    -fx-base: #2A2E37; /* Colore base scuro (per sfondi, tabelle) */
+    -fx-background: #2A2E37;
+    -fx-control-inner-background: #2A2E37; /* Sfondo interno di tabelle/liste */
+}
+
+/* Testo */
+.label {
+    -fx-text-fill: #F5F5F5; /* Testo chiaro (quasi bianco) */
+}
+
+/* Pulsanti */
+.button {
+    -fx-background-color: #0078D7; /* Blu per i pulsanti */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.button:hover {
+    -fx-background-color: #005A9E; /* Blu più scuro al passaggio */
+}
+
+/* Intestazione Tabella */
+.table-view .column-header-background {
+    -fx-background-color: #2A2E37; /* Sfondo scuro per intestazione */
+    -fx-border-color: #4A4E57;
+    -fx-border-width: 0 0 1 0; /* Bordo solo sotto */
+}
+.table-view .column-header .label {
+    -fx-text-fill: #F5F5F5; /* Testo intestazione chiaro */
+    -fx-font-weight: bold;
+}
+
+/* Righe Tabella */
+.table-row-cell {
+    -fx-background-color: #2A2E37;
+    -fx-text-fill: #F5F5F5;
+    -fx-border-color: #4A4E57;
+    -fx-border-width: 0 0 1 0; /* Bordo solo sotto */
+    -fx-cell-size: 40px; /* Aumenta l'altezza della riga (default è ~24px) */
+}
+/* Colore riga selezionata */
+.table-row-cell:selected {
+    -fx-background-color: #005A9E; /* Blu (lo stesso dei pulsanti) */
+    -fx-text-fill: white;
+}
+table-cell.title-column-cell {
+    -fx-font-weight: bold; /* Grassetto */
+    -fx-font-size: 14px; /* Leggermente più grande */
+    -fx-alignment: CENTER_LEFT; /* Allineamento (opzionale) */
+}
+
+/* ScrollBar (necessarie per il tema scuro) */
+.scroll-bar .thumb {
+    -fx-background-color: #4A4E57;
+}
+.scroll-bar .track {
+    -fx-background-color: #2A2E37;
+}

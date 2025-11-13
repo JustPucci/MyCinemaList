@@ -2,11 +2,9 @@ package it.ingsw.progetto.media;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Concrete class representing a documentary. Implements Media.
- */
 public class Documentario implements Media {
 
     // Specific enum for Documentary genres
@@ -29,9 +27,6 @@ public class Documentario implements Media {
         // Jackson needs this constructor
     }
 
-    /**
-     * Full constructor with Jackson annotations for creation/deserialization.
-     */
     @JsonCreator
     public Documentario(
             @JsonProperty("titolo") String titolo,
@@ -63,6 +58,7 @@ public class Documentario implements Media {
     public StatoVisione getStatoVisione() { return statoVisione; }
 
     @Override
+    @JsonIgnore
     public String getTipoContenuto() { return "Documentario"; }
 
     // --- Setters ---
@@ -88,6 +84,7 @@ public class Documentario implements Media {
     // --- Utility Methods ---
 
     @Override
+    @JsonIgnore
     public String getDettagliVisualizzazione() {
         return String.format(
                 "| Type: %-12s | Title: %-30s | Subject: %-15s | Year: %4d | Genre: %-12s | Rating: %d/5 | Status: %-10s |",

@@ -2,11 +2,10 @@ package it.ingsw.progetto.media;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Concrete class representing a feature film. Implements Media.
- */
+
 public class Film implements Media {
 
     // Specific attributes
@@ -21,12 +20,9 @@ public class Film implements Media {
 
     // Default constructor needed by Jackson for deserialization
     public Film() {
-        // Jackson needs this constructor
+
     }
 
-    /**
-     * Full constructor with Jackson annotations for creation/deserialization.
-     */
     @JsonCreator // Instructs Jackson to use this constructor for creation
     public Film(
             @JsonProperty("titolo") String titolo,
@@ -58,6 +54,7 @@ public class Film implements Media {
     public StatoVisione getStatoVisione() { return statoVisione; }
 
     @Override
+    @JsonIgnore
     public String getTipoContenuto() { return "Film"; }
 
     // --- Setters ---
@@ -83,6 +80,7 @@ public class Film implements Media {
     // --- Utility Methods ---
 
     @Override
+    @JsonIgnore
     public String getDettagliVisualizzazione() {
         return String.format(
                 "| Type: %-12s | Title: %-30s | Director: %-15s | Year: %4d | Genre: %-12s | Rating: %d/5 | Status: %-10s |",

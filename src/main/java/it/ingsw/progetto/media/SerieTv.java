@@ -1,6 +1,7 @@
 package it.ingsw.progetto.media;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -66,6 +67,7 @@ public class SerieTv implements Media {
     public StatoVisione getStatoVisione() { return statoVisione; }
 
     @Override
+    @JsonIgnore
     public String getTipoContenuto() { return "SerieTV"; }
 
     // --- Setters ---
@@ -92,6 +94,7 @@ public class SerieTv implements Media {
     // --- Utility Methods ---
 
     @Override
+    @JsonIgnore
     public String getDettagliVisualizzazione() {
         return String.format(
                 "| Type: %-12s | Title: %-30s | Seasons: %2d | Watched: %3d eps | Genre: %-12s | Rating: %d/5 | Status: %-10s |",
