@@ -1,12 +1,12 @@
 package it.ingsw.progetto;
 
-import it.ingsw.progetto.UI.MediaDialog;
 import it.ingsw.progetto.collection.CollezioneMedia;
 import it.ingsw.progetto.dati.GestoreDatiInterface;
 import it.ingsw.progetto.dati.GestoreDatiJSON;
 import it.ingsw.progetto.media.Media;
 import it.ingsw.progetto.strategy.CriterioFiltro;
 import it.ingsw.progetto.strategy.FiltraPerTipo;
+import it.ingsw.progetto.UI.MediaDialog; // Importa il tuo MediaDialog
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -14,38 +14,30 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory; // Collega colonne ai getter
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
-
-//Classe principale della GUI (JavaFX).
 public class GuiApplication extends Application {
 
-    // --- Collegamento Backend ---
+    // --- Backend Connection ---
     private static CollezioneMedia collezione;
     private static final String FILE_PATH = "collezione.json";
 
-    // --- Componenti GUI ---
-    private TableView<Media> tableView; // Tabella principale
-
-    // Lista "osservabile" per la GUI
+    // --- GUI Components ---
+    private TableView<Media> tableView;
     private ObservableList<Media> observableMediaList;
-
-    // Componenti per i filtri
     private ComboBox<String> filtroTipoComboBox;
 
-    // Punto di ingresso dell'applicazione JavaFX.
     @Override
     public void start(Stage primaryStage) {
 
-        // --- 1. Inizializzazione Backend ---
+        // --- 1. Initialization (Backend) ---
         GestoreDatiInterface gestoreDati = new GestoreDatiJSON(FILE_PATH);
         collezione = CollezioneMedia.getIstanza(gestoreDati);
 
@@ -53,70 +45,71 @@ public class GuiApplication extends Application {
         BorderPane rootLayout = new BorderPane();
         rootLayout.setPadding(new Insets(10));
 
-        // 2a. Titolo
-        Label titleLabel = new Label("My Cinema List");
+        // 2a. Top Title
+        Label titleLabel = new Label("My Media Collection Manager");
         titleLabel.setFont(new Font("Arial", 24));
         rootLayout.setTop(titleLabel);
         BorderPane.setMargin(titleLabel, new Insets(0, 0, 10, 0));
 
-        // 2b. Tabella
+        // 2b. Center Table
         tableView = new TableView<>();
         setupTableColumns();
         rootLayout.setCenter(tableView);
 
-        // 2c. Caricamento Dati
-        // Converte la List del backend in ObservableList per la GUI
-        observableMediaList = FXCollections.observableArrayList(collezione.getElencoCompleto());
-        VBox actionPanel = createActionPanel(); // Creiamo il pannello
-        rootLayout.setRight(actionPanel); // !!! Aggiungiamo il pannello a destra !!!
+        // 2c. Right Action Panel
+        VBox actionPanel = createActionPanel();
+        rootLayout.setRight(actionPanel); // Add panel to layout
         BorderPane.setMargin(actionPanel, new Insets(0, 0, 0, 10));
 
-        // Collega la lista alla tabella
-        tableView.setItems(observableMediaList);
+        // 2d. Load Data
+        refreshTableData();
 
-        rootLayout.setCenter(tableView);
+        // --- 3. Scene and Stage Setup ---
+        Scene scene = new Scene(rootLayout, 1024, 768);
 
-        // --- 3. Setup Scena e Finestra ---
-        Scene scene = new Scene(rootLayout, 1024, 768); // Dimensioni finestra
-
+        // Load CSS
         try {
             String cssPath = getClass().getResource("/styles.css").toExternalForm();
             scene.getStylesheets().add(cssPath);
         } catch (Exception e) {
-            System.err.println("Errore: Impossibile caricare style.css.");
+            System.err.println("ERROR: Cannot load styles.css.");
             e.printStackTrace();
         }
 
         primaryStage.setTitle("My Media Collection Manager");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        primaryStage.setTitle("My Cinema List");
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
+    /**
+     * Helper method to create the side panel.
+     * @return The VBox with all controls.
+     */
     private VBox createActionPanel() {
-        VBox panel = new VBox(10); // Spaziatura di 10px
+        VBox panel = new VBox(10); // 10px spacing
         panel.setPadding(new Insets(10));
         panel.setMinWidth(200);
 
-        // --- Pulsante Aggiungi (Logica da implementare) ---
+        // --- Add Button ---
         Button addButton = new Button("Aggiungi Nuovo Media...");
         addButton.setMaxWidth(Double.MAX_VALUE);
-        addButton.setOnAction(e -> gestisciAggiungi()); // Prossimo passo
+        addButton.setOnAction(e -> gestisciAggiungi());
 
-        // --- Pulsante Rimuovi ---
+        // --- !!! MODIFICATION: EDIT BUTTON !!! ---
+        Button editButton = new Button("Modifica Selezionato...");
+        editButton.setMaxWidth(Double.MAX_VALUE);
+        editButton.setOnAction(e -> gestisciModifica());
+
+        // --- Remove Button ---
         Button removeButton = new Button("Rimuovi Selezionato");
         removeButton.setMaxWidth(Double.MAX_VALUE);
         removeButton.setOnAction(e -> gestisciRimuovi());
 
-        // --- Controlli Filtro ---
+        // --- Filter Controls ---
         Label filtroLabel = new Label("Filtra per Tipo:");
         filtroTipoComboBox = new ComboBox<>();
-        // Popoliamo il menu a tendina
         filtroTipoComboBox.setItems(FXCollections.observableArrayList(
-                "Film", "Documentario", "SerieTV"
+                "Film", "Documentario", "SerieTv" // Match your class name
         ));
         filtroTipoComboBox.setMaxWidth(Double.MAX_VALUE);
 
@@ -126,45 +119,85 @@ public class GuiApplication extends Application {
 
         Button clearFilterButton = new Button("Pulisci Filtro");
         clearFilterButton.setMaxWidth(Double.MAX_VALUE);
-        clearFilterButton.setOnAction(e -> refreshTableData()); // Ricarica tutto
+        clearFilterButton.setOnAction(e -> refreshTableData());
 
-        // Aggiunge tutti i controlli al pannello
+        // --- !!! MODIFICATION: ADD ALL BUTTONS !!! ---
+        // Add all controls to the panel
         panel.getChildren().addAll(
-                addButton, removeButton,
-                new Separator(), // Linea di separazione
+                addButton, editButton, removeButton, // Ensure 'editButton' is here
+                new Separator(),
                 filtroLabel, filtroTipoComboBox, filterButton, clearFilterButton
         );
 
         return panel;
     }
 
+    /**
+     * Handles "Aggiungi Nuovo Media" button click.
+     * (Fix: Added update to observableMediaList)
+     */
     private void gestisciAggiungi() {
+        // 1. Create the dialog (Add mode)
         MediaDialog dialog = new MediaDialog();
 
-        // 2. Mostra il dialogo e attendi il risultato
+        // 2. Show dialog and wait for result
         Optional<Media> result = dialog.showAndWait();
 
-        // 3. Controlla se l'utente ha premuto "Salva" e il risultato è valido
+        // 3. If user clicked "Salva"
         result.ifPresent(nuovoMedia -> {
-                    // 4. Chiama il backend (Singleton)
-                    collezione.aggiungiMedia(nuovoMedia);
+            // 4. Call backend
+            collezione.aggiungiMedia(nuovoMedia);
 
-                    // 5. Aggiorna la GUI (la tabella)
-                    observableMediaList.add(nuovoMedia);
-                    System.out.println("Aggiunto: " + nuovoMedia.getTitolo());
-                });
+            // 5. Update GUI (This line is crucial)
+            observableMediaList.add(nuovoMedia);
+
+            System.out.println("Added: " + nuovoMedia.getTitolo());
+        });
     }
 
-    private void gestisciRimuovi() {
-        // 1. Prendi l'oggetto selezionato dalla tabella
+    /**
+     * Handles "Modifica Selezionato" button click.
+     */
+    private void gestisciModifica() {
+        // 1. Get selected item
         Media selectedMedia = tableView.getSelectionModel().getSelectedItem();
 
         if (selectedMedia == null) {
-            mostraErrore("Nessun elemento selezionato", "Per favore, seleziona un media dalla tabella prima di rimuoverlo.");
-            return; // Esci se non c'è nulla da fare
+            mostraErrore("Nessun elemento selezionato", "Seleziona un media da modificare.");
+            return;
         }
 
-        // 2. Chiedi conferma
+        // 2. Create dialog (Edit mode)
+        MediaDialog dialog = new MediaDialog(selectedMedia);
+
+        // 3. Show dialog and wait for result
+        Optional<Media> result = dialog.showAndWait();
+
+        // 4. If user clicked "Salva"
+        result.ifPresent(mediaModificato -> {
+            // 5. Call backend (just to save)
+            collezione.modificaMedia();
+
+            // 6. Update GUI (force table refresh)
+            tableView.refresh();
+            System.out.println("Modified: " + mediaModificato.getTitolo());
+        });
+    }
+
+
+    /**
+     * Handles "Rimuovi Selezionato" button click.
+     */
+    private void gestisciRimuovi() {
+        // 1. Get selected item
+        Media selectedMedia = tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedMedia == null) {
+            mostraErrore("Nessun elemento selezionato", "Seleziona un media da rimuovere.");
+            return;
+        }
+
+        // 2. Ask for confirmation
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma Rimozione");
         alert.setHeaderText("Rimuovere '" + selectedMedia.getTitolo() + "'?");
@@ -173,13 +206,13 @@ public class GuiApplication extends Application {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // 3. Chiama il backend (Singleton)
+            // 3. Call backend
             boolean rimosso = collezione.rimuoviMedia(selectedMedia.getTitolo());
 
             if (rimosso) {
-                // 4. Aggiorna la GUI
+                // 4. Update GUI
                 observableMediaList.remove(selectedMedia);
-                System.out.println("Rimosso: " + selectedMedia.getTitolo());
+                System.out.println("Removed: " + selectedMedia.getTitolo());
             } else {
                 mostraErrore("Errore di Rimozione", "Impossibile rimuovere " + selectedMedia.getTitolo() + ".");
             }
@@ -187,31 +220,30 @@ public class GuiApplication extends Application {
     }
 
     /**
-     * Logica per il pulsante "Applica Filtro".
-     * Usa il Pattern Strategy.
+     * Handles "Applica Filtro" button click.
+     * Uses the Strategy Pattern.
      */
     private void gestisciFiltro() {
         String tipoSelezionato = filtroTipoComboBox.getValue();
 
         if (tipoSelezionato == null || tipoSelezionato.isEmpty()) {
-            mostraErrore("Filtro non valido", "Per favore, seleziona un tipo dal menu a tendina.");
+            mostraErrore("Filtro non valido", "Seleziona un tipo dal menu.");
             return;
         }
 
-        // 1. Crea la Strategia concreta
+        // 1. Create the Strategy
         CriterioFiltro criterio = new FiltraPerTipo(tipoSelezionato);
 
-        // 2. Chiama il backend
+        // 2. Call backend
         List<Media> risultatiFiltrati = collezione.applicaFiltro(criterio);
 
-        // 3. Aggiorna la GUI (la tabella)
+        // 3. Update GUI
         observableMediaList.setAll(risultatiFiltrati);
-        System.out.println("Filtro applicato per: " + tipoSelezionato);
+        System.out.println("Filter applied: " + tipoSelezionato);
     }
 
     /**
-     * Ricarica TUTTI i dati dal backend e aggiorna la tabella.
-     * Usato all'avvio e per "Pulisci Filtro".
+     * Reloads all data from backend into the table.
      */
     private void refreshTableData() {
         if (observableMediaList == null) {
@@ -219,15 +251,15 @@ public class GuiApplication extends Application {
             tableView.setItems(observableMediaList);
         }
 
-        // Carica la lista completa e aggiorna la tabella
+        // Load full list and update table
         observableMediaList.setAll(collezione.getElencoCompleto());
-        System.out.println("Tabella aggiornata. Mostrati " + observableMediaList.size() + " elementi.");
+        System.out.println("Table refreshed. " + observableMediaList.size() + " items.");
     }
 
     /**
-     * Metodo helper per mostrare un pop-up di errore.
-     * @param titolo Il titolo della finestra di errore.
-     * @param messaggio Il messaggio di errore.
+     * Helper to show error popups.
+     * @param titolo Title of the error.
+     * @param messaggio The error message.
      */
     private void mostraErrore(String titolo, String messaggio) {
         System.err.println(titolo + ": " + messaggio); // Debugging print
@@ -238,8 +270,10 @@ public class GuiApplication extends Application {
         alert.showAndWait();
     }
 
+    /**
+     * Helper method to set up table columns.
+     */
     private void setupTableColumns() {
-
         TableColumn<Media, String> typeColumn = new TableColumn<>("Type");
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("tipoContenuto"));
         typeColumn.setMinWidth(100);
@@ -247,22 +281,29 @@ public class GuiApplication extends Application {
         TableColumn<Media, String> titleColumn = new TableColumn<>("Title");
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("titolo"));
         titleColumn.setMinWidth(250);
-        titleColumn.getStyleClass().add("title-column-cell");
+        titleColumn.getStyleClass().add("title-column-cell"); // CSS class
 
         TableColumn<Media, Integer> ratingColumn = new TableColumn<>("Rating (1-5)");
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("valutazionePersonale"));
         ratingColumn.setMinWidth(100);
 
+        TableColumn<Media, Integer> yearColumn = new TableColumn<>("Anno");
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("annoUscita"));
+        yearColumn.setMinWidth(100);
+
+
         TableColumn<Media, Media.StatoVisione> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("statoVisione"));
         statusColumn.setMinWidth(120);
 
-        tableView.getColumns().addAll(typeColumn, titleColumn, ratingColumn, statusColumn);
-
+        tableView.getColumns().addAll(typeColumn, titleColumn, yearColumn, statusColumn,ratingColumn);
         tableView.getSortOrder().add(titleColumn);
     }
 
 
+    /**
+     * Main method (Java entry point).
+     */
     public static void main(String[] args) {
         launch(args);
     }

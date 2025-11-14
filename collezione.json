@@ -1,1 +1,9 @@
-[ ]
+[ {
+  "@type" : "Film",
+  "titolo" : "Interstellar",
+  "regista" : "Nolan",
+  "annoUscita" : 2017,
+  "genere" : "FANTASCIENZA",
+  "valutazionePersonale" : 5,
+  "statoVisione" : "VISTO"
+} ]

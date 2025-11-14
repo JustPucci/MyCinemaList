@@ -24,6 +24,7 @@ public class SerieTv implements Media {
     // Common attributes (from Media)
     private int valutazionePersonale;
     private StatoVisione statoVisione;
+    private int annoUscita;
 
     // Default constructor needed by Jackson for deserialization
     public SerieTv() {
@@ -41,6 +42,7 @@ public class SerieTv implements Media {
             @JsonProperty("episodiVisti") int episodiVisti,
             @JsonProperty("genere") GenereSerie genere,
             @JsonProperty("valutazionePersonale") int valutazionePersonale,
+            @JsonProperty("annoUscita") int annoUscita,
             @JsonProperty("statoVisione") StatoVisione statoVisione) {
 
         this.titolo = titolo;
@@ -50,6 +52,7 @@ public class SerieTv implements Media {
         this.genere = genere;
         setValutazionePersonale(valutazionePersonale);
         this.statoVisione = statoVisione;
+        this.annoUscita = annoUscita;
     }
 
     // --- Getters ---
@@ -58,6 +61,11 @@ public class SerieTv implements Media {
     public String getRegista() { return regista; }
     public int getNumeroStagioni() { return numeroStagioni; }
     public int getEpisodiVisti() { return episodiVisti; }
+
+    public int getAnnoUscita() {
+        return annoUscita;
+    }
+
     public GenereSerie getGenere() { return genere; }
 
     @Override
@@ -76,6 +84,10 @@ public class SerieTv implements Media {
     public void setNumeroStagioni(int numeroStagioni) { this.numeroStagioni = numeroStagioni; }
     public void setEpisodiVisti(int episodiVisti) { this.episodiVisti = episodiVisti; }
     public void setGenere(GenereSerie genere) { this.genere = genere; }
+
+    public void setAnnoUscita(int annoUscita) {
+        this.annoUscita = annoUscita;
+    }
 
     @Override
     public void setValutazionePersonale(int valutazionePersonale) {

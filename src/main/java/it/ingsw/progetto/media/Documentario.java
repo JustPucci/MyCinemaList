@@ -15,7 +15,7 @@ public class Documentario implements Media {
     // Specific attributes
     private String titolo;
     private String soggettoPrincipale;
-    private int dataPubblicazione;
+    private int annoUscita;
     private GenereDocumentario genere;
 
     // Common attributes (from Media)
@@ -31,14 +31,14 @@ public class Documentario implements Media {
     public Documentario(
             @JsonProperty("titolo") String titolo,
             @JsonProperty("soggettoPrincipale") String soggettoPrincipale,
-            @JsonProperty("dataPubblicazione") int dataPubblicazione,
+            @JsonProperty("annoUscita") int annoUscita,
             @JsonProperty("genere") GenereDocumentario genere,
             @JsonProperty("valutazionePersonale") int valutazionePersonale,
             @JsonProperty("statoVisione") StatoVisione statoVisione) {
 
         this.titolo = titolo;
         this.soggettoPrincipale = soggettoPrincipale;
-        this.dataPubblicazione = dataPubblicazione;
+        this.annoUscita = annoUscita;
         this.genere = genere;
         setValutazionePersonale(valutazionePersonale);
         this.statoVisione = statoVisione;
@@ -48,7 +48,7 @@ public class Documentario implements Media {
     @Override
     public String getTitolo() { return titolo; }
     public String getSoggettoPrincipale() { return soggettoPrincipale; }
-    public int getDataPubblicazione() { return dataPubblicazione; }
+    public int getAnnoUscita() { return annoUscita; }
     public GenereDocumentario getGenere() { return genere; }
 
     @Override
@@ -64,7 +64,7 @@ public class Documentario implements Media {
     // --- Setters ---
     public void setTitolo(String titolo) { this.titolo = titolo; }
     public void setSoggettoPrincipale(String soggettoPrincipale) { this.soggettoPrincipale = soggettoPrincipale; }
-    public void setDataPubblicazione(int dataPubblicazione) { this.dataPubblicazione = dataPubblicazione; }
+    public void setAnnoUscita(int dataPubblicazione) { this.annoUscita = dataPubblicazione; }
     public void setGenere(GenereDocumentario genere) { this.genere = genere; }
 
     @Override
@@ -88,7 +88,7 @@ public class Documentario implements Media {
     public String getDettagliVisualizzazione() {
         return String.format(
                 "| Type: %-12s | Title: %-30s | Subject: %-15s | Year: %4d | Genre: %-12s | Rating: %d/5 | Status: %-10s |",
-                getTipoContenuto(), titolo, soggettoPrincipale, dataPubblicazione, genere.name(), valutazionePersonale, statoVisione.name().replace("_", " ")
+                getTipoContenuto(), titolo, soggettoPrincipale, annoUscita, genere.name(), valutazionePersonale, statoVisione.name().replace("_", " ")
         );
     }
 }
