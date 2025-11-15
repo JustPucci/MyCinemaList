@@ -117,8 +117,8 @@ public class CollezioneMedia {
 
     //Metodi dello STRATEGY
 
-    public List<Media> applicaFiltro (CriterioFiltro criterio){
-        return criterio.applicaFiltro(this.elencoMedia);
+    public List<Media> applicaFiltro (CriterioFiltro criterio, List<Media> listaDaFiltrare){
+        return criterio.applicaFiltro(listaDaFiltrare);
     }
     public List<Media> ordina(CriterioOrdinamento criterio){
         return criterio.ordina(this.elencoMedia);

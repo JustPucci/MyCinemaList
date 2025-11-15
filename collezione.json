@@ -6,4 +6,12 @@
   "genere" : "FANTASCIENZA",
   "valutazionePersonale" : 5,
   "statoVisione" : "VISTO"
+}, {
+  "@type" : "Documentario",
+  "titolo" : "Ragni",
+  "soggettoPrincipale" : "ragni",
+  "annoUscita" : 2024,
+  "genere" : "NATURA",
+  "valutazionePersonale" : 3,
+  "statoVisione" : "DA_VEDERE"
 } ]
